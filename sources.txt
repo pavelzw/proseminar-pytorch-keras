@@ -1,0 +1,6 @@
+edX Pytorch Kurs
+sentdex Pytorch introduction (https://youtu.be/BzcBsTou0C0)
+Deeplizard Keras Beginner Tutorial (https://youtu.be/qFJeN9V1ZsI)
+
+Kapitel 1: Tensoren
+https://pytorch.org/docs/stable/tensors.html
