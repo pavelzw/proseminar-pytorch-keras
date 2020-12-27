@@ -1,5 +1,5 @@
 PyTorch
-    Kurze Einführung in Tensoren
+    -Kurze Einführung in Tensoren
     Tochvision 
         Datasets
         Transforms, Compose

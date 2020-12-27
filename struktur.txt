@@ -1,37 +1,35 @@
-Pytorch
-    Was ist ein Tensor?
-    Beispiel Softmax
-        zB Klassifizierung von Zahlen
-    Beispiel Neuronale Netze
-    Ableitungen
-    Data Set
-        Transform/Compose
-        TorchVision
-            Vordefinierte Transformationen
-    Linear Regression
-        Linear Klasse
-        Loss
+PyTorch
+    Kurze Einführung in Tensoren
+    Tochvision 
+        Datasets
+        Transforms, Compose
+    Linear Regression Implementierung
+        Loss Implementierung
         Gradient Descent
-        Training, Validation, Test Split
-    ...
-    torch.nn.Module -> Feed Forward Neural Network
-        Activation functions (torch.nn.functional.relu)
-    Convolutional Neural Networks
+        Training-Validation-Test Split
+    Feed Forward Neural Network
+        torch.nn.Module
+        Activation functions zeigen, z.B. relu, sigmoid
+
+
+TensorFlow/Keras
+    Kurz was zu sessions und TensorFlow 1 erwähnen
+    Linear Classifier 
+        Feature columns 
+        tf.estimator.LinearClassifier
+    Convolutional Neural Network
+        Diesmal mit eigenem Dataset einlesen
+        tf.keras.models.Sequential
         Pooling
-    ...
-TensorFlow
-    Sessions
-    Data Flow Graph/Graph Building
-    Linear Classifier -> tf.estimator
-    Feature columns
-Keras
-    Sequential(...)
-    Dense() (fully connected NN)
-    model.predict(...)
-    saving models
-    importing models
-    bsp ImageNET (https://youtu.be/qFJeN9V1ZsI?t=5909) (vgg16)
-        model freezing
-        auf bereits trainiertem model weiterspezialisieren
-    data augmentation
-    
+    Modelle freezen, Transfer Learning
+        ImageNET als Beispiel
+    Data augmentation
+
+
+Vergleich
+    PyTorch ist besser in Python integriert
+    TensorFlow hat mehr Möglichkeiten
+    Visualisierungsfeatures in TensorFlow
+    Deployment: TensorFlow Serving
+    Google Trends Graph (https://trends.google.com/trends/explore?date=today%205-y&geo=DE&q=tensorflow,pytorch)
+    Benutzung in der Research Community (http://horace.io/pytorch-vs-tensorflow/)

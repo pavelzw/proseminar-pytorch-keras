@@ -1,0 +1,37 @@
+Pytorch
+    Was ist ein Tensor?
+    Beispiel Softmax
+        zB Klassifizierung von Zahlen
+    Beispiel Neuronale Netze
+    Ableitungen
+    Data Set
+        Transform/Compose
+        TorchVision
+            Vordefinierte Transformationen
+    Linear Regression
+        Linear Klasse
+        Loss
+        Gradient Descent
+        Training, Validation, Test Split
+    ...
+    torch.nn.Module -> Feed Forward Neural Network
+        Activation functions (torch.nn.functional.relu)
+    Convolutional Neural Networks
+        Pooling
+    ...
+TensorFlow
+    Sessions
+    Data Flow Graph/Graph Building
+    Linear Classifier -> tf.estimator
+    Feature columns
+Keras
+    Sequential(...)
+    Dense() (fully connected NN)
+    model.predict(...)
+    saving models
+    importing models
+    bsp ImageNET (https://youtu.be/qFJeN9V1ZsI?t=5909) (vgg16)
+        model freezing
+        auf bereits trainiertem model weiterspezialisieren
+    data augmentation
+    
