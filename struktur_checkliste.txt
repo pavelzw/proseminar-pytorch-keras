@@ -7,9 +7,9 @@ PyTorch
     -    Loss Implementierung
     -    Gradient Descent
     -    Training-Validation-Test Split
-    Feed Forward Neural Network
-        torch.nn.Module
-        Activation functions zeigen, z.B. relu, sigmoid
+    -Feed Forward Neural Network
+    -    torch.nn.Module
+    -    Activation functions zeigen, z.B. relu, sigmoid
 
 
 TensorFlow/Keras
