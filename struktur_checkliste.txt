@@ -1,12 +1,12 @@
 PyTorch
     -Kurze Einführung in Tensoren
-    Tochvision 
-        Datasets
-        Transforms, Compose
-    Linear Regression Implementierung
-        Loss Implementierung
-        Gradient Descent
-        Training-Validation-Test Split
+    -Tochvision 
+    -    Datasets
+    -    Transforms, Compose
+    -Linear Regression Implementierung
+    -    Loss Implementierung
+    -    Gradient Descent
+    -    Training-Validation-Test Split
     Feed Forward Neural Network
         torch.nn.Module
         Activation functions zeigen, z.B. relu, sigmoid
