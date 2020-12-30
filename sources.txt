@@ -1,6 +1,5 @@
 edX Pytorch Kurs
 sentdex Pytorch introduction (https://youtu.be/BzcBsTou0C0)
-Deeplizard Keras Beginner Tutorial (https://youtu.be/qFJeN9V1ZsI)
 
 Kapitel 1: Tensoren
 https://pytorch.org/docs/stable/tensors.html
@@ -12,3 +11,6 @@ Sentdex video (und das hier: https://pythonprogramming.net/training-deep-learnin
 Logistic Regression
 https://towardsdatascience.com/logistic-regression-on-mnist-with-pytorch-b048327f8d19
 Different activation functions (https://heartbeat.fritz.ai/benchmarking-deep-learning-activation-functions-on-mnist-3d174e729735)
+
+Kapitel 3:
+Deeplizard Keras Beginner Tutorial (https://youtu.be/qFJeN9V1ZsI)

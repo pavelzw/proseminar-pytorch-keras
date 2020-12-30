@@ -1,4 +1,4 @@
-PyTorch
+-PyTorch
     -Kurze Einführung in Tensoren
     -Tochvision 
     -    Datasets
@@ -13,14 +13,14 @@ PyTorch
 
 
 TensorFlow/Keras
-    Kurz was zu sessions und TensorFlow 1 erwähnen
-    Linear Classifier 
+    TODO Kurz was zu sessions und TensorFlow 1 erwähnen
+    TODO EVTL DOCH NICHT? Linear Classifier 
         Feature columns 
         tf.estimator.LinearClassifier
-    Convolutional Neural Network
-        Diesmal mit eigenem Dataset einlesen
-        tf.keras.models.Sequential
-        Pooling
+    -Convolutional Neural Network
+    -    Diesmal mit eigenem Dataset einlesen
+    -    tf.keras.models.Sequential
+    -    Pooling
     Modelle freezen, Transfer Learning
         ImageNET als Beispiel
     Data augmentation
