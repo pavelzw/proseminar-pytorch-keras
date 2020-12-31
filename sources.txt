@@ -14,3 +14,5 @@ Different activation functions (https://heartbeat.fritz.ai/benchmarking-deep-lea
 
 Kapitel 3:
 Deeplizard Keras Beginner Tutorial (https://youtu.be/qFJeN9V1ZsI)
+MaskFace-Net (https://github.com/cabani/MaskedFace-Net)
+Cats and Dogs Dataset (https://www.microsoft.com/en-us/download/details.aspx?id=54765) (https://www.kaggle.com/c/dogs-vs-cats/data)

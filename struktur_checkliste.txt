@@ -21,8 +21,8 @@ TensorFlow/Keras
     -    Diesmal mit eigenem Dataset einlesen
     -    tf.keras.models.Sequential
     -    Pooling
-    Modelle freezen, Transfer Learning
-        ImageNET als Beispiel
+    -Modelle freezen, Transfer Learning
+    -    VGG16 (ImageNET) als Beispiel
     Data augmentation
 
 
