@@ -23,7 +23,7 @@ TensorFlow/Keras
     -    Pooling
     -Modelle freezen, Transfer Learning
     -    VGG16 (ImageNET) als Beispiel
-    Data augmentation
+    -Data augmentation
 
 
 Vergleich
