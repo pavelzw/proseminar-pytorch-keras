@@ -1,6 +1,14 @@
 edX Pytorch Kurs
 sentdex Pytorch introduction (https://youtu.be/BzcBsTou0C0)
 
+Kapitel 0: Intro
+PyTorch vs. TensorFlow (https://towardsdatascience.com/pytorch-vs-tensorflow-in-2020-fe237862fae1)
+https://trends.google.de/trends/explore?date=2016-01-01%202021-01-01&q=pytorch,tensorflow
+https://www.machinelearningplus.com/deep-learning/tensorflow1-vs-tensorflow2-vs-pytorch/
+
+Kein offizieller Support für OpenCL (https://towardsdatascience.com/on-the-state-of-deep-learning-outside-of-cudas-walled-garden-d88c8bbb4342)
+TensorFlow Apple M1 (https://blog.tensorflow.org/2020/11/accelerating-tensorflow-performance-on-mac.html)
+
 Kapitel 1: Tensoren
 https://pytorch.org/docs/stable/tensors.html
 
