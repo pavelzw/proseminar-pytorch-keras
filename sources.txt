@@ -9,6 +9,8 @@ https://www.machinelearningplus.com/deep-learning/tensorflow1-vs-tensorflow2-vs-
 Kein offizieller Support für OpenCL (https://towardsdatascience.com/on-the-state-of-deep-learning-outside-of-cudas-walled-garden-d88c8bbb4342)
 TensorFlow Apple M1 (https://blog.tensorflow.org/2020/11/accelerating-tensorflow-performance-on-mac.html)
 
+Decision tree (https://realpython.com/pytorch-vs-tensorflow/)
+
 Kapitel 1: Tensoren
 https://pytorch.org/docs/stable/tensors.html
 
