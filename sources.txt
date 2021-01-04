@@ -15,6 +15,7 @@ Kapitel 1: Tensoren
 https://pytorch.org/docs/stable/tensors.html
 
 Kapitel 2:
+NN Visualisierung (https://alexlenail.me/NN-SVG/)
 Datasets
 Sentdex video (und das hier: https://pythonprogramming.net/training-deep-learning-neural-network-pytorch/)
 
