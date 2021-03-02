@@ -1,20 +1,33 @@
 \section{Introduction | Einleitung}
 Mandatory. Questions like: What is the topic of this work, what's the broader context (topic of the proseminar), why is it relevant?
 
+\section{PyTorch}
+\subsection{Daten laden und präparieren}
 
-\section{Methods/Algorithms/Derivations | Methoden/Algorithmen/Herleitungen}
-If applicable.
-\subsection{Method 1}
-If applicable.
+\lstinputlisting[label=py:load-data-pytorch, language=Python, caption=MNIST Datensatz mit TorchVision herunterladen.]{code/load-data-pytorch.py}
 
+\subsection{Modellerstellung}
 
-\section{Applications/Examples/Own experiments | Anwendung/Beispiele/Eigene Experimente}
-If applicable.
-\subsection{Application 1}
-If applicable.
+\lstinputlisting[label=py:load-data-pytorch, language=Python, caption=Modellerstellung in PyTorch.]{code/create-model-pytorch.py}
 
+\subsection{Modell trainieren}
 
-\section{Summary and conclusion | Zusammenfassung und Fazit}
+\lstinputlisting[label=py:load-data-pytorch, language=Python, caption=Modell trainieren in PyTorch.]{code/train-model-pytorch.py}
+
+\section{TensorFlow und Keras}
+\subsection{Daten laden und präparieren}
+
+\lstinputlisting[label=py:load-data-pytorch, language=Python, caption=MNIST Datensatz mit \texttt{keras.datasets} herunterladen.]{code/load-data-tensorflow.py}
+
+\subsection{Modellerstellung}
+
+\lstinputlisting[label=py:load-data-pytorch, language=Python, caption=Modellerstellung in TensorFlow.]{code/create-model-tensorflow.py}
+
+\subsection{Modell trainieren}
+
+\lstinputlisting[label=py:load-data-pytorch, language=Python, caption=Modell trainieren in TensorFlow.]{code/train-model-tensorflow.py}
+
+\section{Zusammenfassung und Fazit}
 Mandatory. Short summary of the most important aspects of the report.
 If possible: What are open challenges?
 
@@ -52,11 +65,6 @@ The state update of the leaky integrating neuron in figure \ref{fig:leaky_integr
     x_i(t+1) &= \lambda_i \cdot \left(W_{i,j} \cdot U_j(t)\right) + (1-\lambda_i) \cdot \theta_i(t)
     \label{eq:leaky_integration}
 \end{align}
-
-\subsection{Code block example}
-From equation \ref{eq:leaky_integration} the neuron model is implemented using numpy \citep{harris:2020}:
-
-\lstinputlisting[label=py:leaky, language=Python, caption=Python implementation of a single leaky-integrating neuron.]{code/leaky.py}
 
 \subsection{Footnote example}
 The implementation is available on github\footnote{https://github.com/schniewmatz/recurrence}.
