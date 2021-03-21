@@ -6,7 +6,7 @@ class MultiLayerPerceptron(torch.nn.Module):
 
     def forward(self, x):
         x = torch.relu(self.fc1(x))
-        x = torch.log_softmax(self.fc2(x), dim=1)
+        x = torch.softmax(self.fc2(x), dim=1)
         return x
 
 model = MultiLayerPerceptron()

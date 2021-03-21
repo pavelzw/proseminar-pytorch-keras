@@ -1,10 +1,12 @@
 import torch
 from torchvision import datasets, transforms
 
-train_set = datasets.MNIST("data", train=True, download=True,
-                    transform=transforms.Compose([transforms.ToTensor()]))
-test_set = datasets.MNIST("data", train=False, download=True,
-                    transform=transforms.Compose([transforms.ToTensor()]))
+train_set = datasets.MNIST(root="data", train=True, download=True,
+                    transform=transforms.Compose(
+                        [transforms.ToTensor(), torch.flatten]))
+test_set = datasets.MNIST(root="data", train=False, download=True,
+                    transform=transforms.Compose(
+                        [transforms.ToTensor(), torch.flatten]))
 
 batch_size = 50
 

@@ -8,7 +8,7 @@ epochs = 3
 for epoch in range(epochs):
     print(f"Epoch {epoch+1}/{epochs}")
     for images, labels in train_loader:
-        images = Variable(images.view(-1, 28 * 28))
+        images = Variable(images)
         labels = Variable(labels)
 
         optimizer.zero_grad()

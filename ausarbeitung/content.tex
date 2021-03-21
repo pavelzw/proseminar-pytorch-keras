@@ -1,39 +1,110 @@
-\section{Introduction | Einleitung}
-Mandatory. Questions like: What is the topic of this work, what's the broader context (topic of the proseminar), why is it relevant?
+\section{Einleitung}
+% TODO
+% Mandatory. Questions like: What is the topic of this work, what's the broader context (topic of the proseminar), why is it relevant?
+
+In diesem Proseminar sehen wir uns eine Einführung in TensorFlow, Keras und PyTorch an. 
+Hierbei handelt es sich um die relevantesten Machine Learning Frameworks zur Zeit. 
+TensorFlow wird seit 2015 für den Google-internen Bedarf entwickelt und 
+wurde 2017 unter einer Open-Source Lizenz veröffentlicht. 
+Keras bot ursprünglich eine Schnittstelle für verschiedene Machine Learning Backends an, welche 
+einem das Programmieren durch High-Level Funktionen vereinfachen soll. 
+Seit dem Release von Keras 2.4 wurde die Unterstützung verschiedener 
+Backends eingestellt und Keras ist zu einem Teil der TensorFlow Core API geworden. 
+PyTorch wurde 2016 von Facebook veröffentlicht. Dieses Framework basiert auf 
+der Lua-Bibliothek Torch, welche bereits seit 2002 existiert.
 
 \section{PyTorch}
 \subsection{Daten laden und präparieren}
 
-\lstinputlisting[label=py:load-data-pytorch, language=Python, caption=MNIST Datensatz mit TorchVision herunterladen.]{code/load-data-pytorch.py}
+Wenn man ein neuronales Netz erstellen und einsetzen möchte, kann man dies in grob 
+drei Schritte unterteilen: 
+\begin{enumerate}
+    \item Daten einlesen und vorverarbeiten
+    \item Modell erstellen
+    \item Modell trainieren
+\end{enumerate}
+
+Möchte man populäre, weit verbreitete Datensätze für sein Modell verwenden, 
+ist es nicht verkehrt, sich \code{torchvision.datasets}\footnote{\url{https://pytorch.org/vision/stable/datasets.html}} 
+anzuschauen. Dort gibt es viele bekannte Datensätze für die verschiedensten Probleme 
+wie z.~B. MNIST\footnote{\url{http://yann.lecun.com/exdb/mnist}} für Ziffernerkennung, 
+ImageNet\footnote{\url{http://image-net.org}} für Bildklassifizierung oder 
+Cityscapes\footnote{\url{https://www.cityscapes-dataset.com}} 
+zur Klassifizierung von Elementen im Straßenverkehr. 
+
+\lstinputlisting[label=py:pytorch-load-data, language=Python, caption=MNIST Datensatz mit TorchVision herunterladen.]{code/load-data-pytorch.py}
+
+In Listing \ref{py:pytorch-load-data} sehen wir am Beispiel MNIST, wie wir so einen Datensatz herunterladen 
+und für unser Modell präparieren können. Hierfür erstellen wir einfach eine 
+Instanz der Klasse \code{datasets.MNIST} und können dort noch ein paar Optionen angeben. 
+Wichtig für das neuronale Netz ist die Option \code{transform}, mit welcher wir 
+die Daten vorher noch transformieren können. In unserem Beispiel konvertieren wir die 
+Daten in einen Tensor und führen danach \code{torch.flatten} aus, was dazu führt, dass 
+aus einem \(28 \times 28\)-Tensor ein \(784\)-Tensor wird.
+Das benötigen wir, da Fully Connected Neural Networks nichts 
+mit zwei Dimensionalen Tensoren anfangen können. 
+Hier könnte man allerdings auch noch viele andere Sachen machen: 
+PCA\footnote{\url{https://en.wikipedia.org/wiki/Principal_component_analysis}}, die Pixelwerte auf dem Bild normalisieren, etc.
+
+Sind die Daten nun heruntergeladen, können sie in einen \code{DataLoader} gesteckt werden. 
+Dieser liest die Daten ein, teilt sie in Batches auf (damit der Speicher nicht überfüllt wird) 
+und kann die Daten außerdem noch mischen, damit kein Bias entsteht.
 
 \subsection{Modellerstellung}
 
-\lstinputlisting[label=py:load-data-pytorch, language=Python, caption=Modellerstellung in PyTorch.]{code/create-model-pytorch.py}
+Haben wir die nötigen Daten geladen, ist es nun an der Zeit, das Modell zu erstellen. 
+Ich zeige das ganze hier der Einfachheit halber ein Fully Connected Neural Network 
+mit einem Hidden Layer mit 64 Knoten, komplexere Modelle funktionieren allerdings relativ ähnlich. 
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=.6\textwidth]{figures/fcnn-28x28-64-10}
+    \caption{Fully Connected Neural Network.}
+    \label{fig:fcnn}
+\end{figure}
+
+\lstinputlisting[label=py:pytorch-model-creation, language=Python, caption=Modellerstellung in PyTorch.]{code/create-model-pytorch.py}
+
+In Listing \ref{py:pytorch-model-creation} sehen wir nun, wie das ganze in PyTorch realisiert wird. 
+Wir erben von der Klasse \code{torch.nn.Module} und müssen nur zwei Sachen implementieren: 
+den Konstruktor und die Forward-Funktion.
+Im Konstuktor erstellen wir zwei Layer. Auch wenn es in Abbildung \ref{fig:fcnn} 
+so aussieht als hätten wir drei Ebenen, sind die Ebenen, die wir implementieren, 
+die Verbindungslinien zwischen den Knoten, hiervon gibt es nur zwei: 
+die erste Ebene verbindet das Input Layer (\(28 \cdot 28\) Pixel \(\Rightarrow 28 \cdot 28\) Knoten) 
+mit dem Hidden Layer (\(64\) Knoten), die zweite Ebene verbindet die \(64\) Knoten des Hidden Layers
+mit dem Output Layer (\(10\) verschiedene Ziffern \(\Rightarrow 10\) Klassen).
+In der Forward-Methode müssen wir nur implementieren, was die Ausgabe des 
+neuronalen Netzes sein soll, wenn wir eine Eingabe \(x\) in das Netzwerk geben. 
+Wir wenden natürlich das erste Layer auf \(x\) an, schicken es somit ins Hidden Layer, 
+darauf die Aktivierungsfunktion und senden diese Daten dann über \code{fc2} an das Output Layer.
+Damit wir zum Schluss auch noch auf eine Wahrscheinlichkeitsverteilung kommen, 
+wenden wir auf die letzte Ebene noch die Softmax-Aktivierungsfunktion \(\sigma(z)_j = \frac{\exp(z_j)}{\sum_{i} \exp(z_i)}\) an.
 
 \subsection{Modell trainieren}
 
-\lstinputlisting[label=py:load-data-pytorch, language=Python, caption=Modell trainieren in PyTorch.]{code/train-model-pytorch.py}
+\lstinputlisting[label=py:pytorch-model-training, language=Python, caption=Modell trainieren in PyTorch.]{code/train-model-pytorch.py}
 
 \section{TensorFlow und Keras}
 \subsection{Daten laden und präparieren}
 
-\lstinputlisting[label=py:load-data-pytorch, language=Python, caption=MNIST Datensatz mit \texttt{keras.datasets} herunterladen.]{code/load-data-tensorflow.py}
+\lstinputlisting[label=py:keras-load-data, language=Python, caption=MNIST Datensatz mit \texttt{keras.datasets} herunterladen.]{code/load-data-tensorflow.py}
 
 \subsection{Modellerstellung}
 
-\lstinputlisting[label=py:load-data-pytorch, language=Python, caption=Modellerstellung in TensorFlow.]{code/create-model-tensorflow.py}
+\lstinputlisting[label=py:keras-model-creation, language=Python, caption=Modellerstellung in TensorFlow.]{code/create-model-tensorflow.py}
 
 \subsection{Modell trainieren}
 
-\lstinputlisting[label=py:load-data-pytorch, language=Python, caption=Modell trainieren in TensorFlow.]{code/train-model-tensorflow.py}
+\lstinputlisting[label=py:keras-model-training, language=Python, caption=Modell trainieren in TensorFlow.]{code/train-model-tensorflow.py}
 
 \subsection{CNN Implementierung}
 
-\lstinputlisting[label=py:load-data-pytorch, language=Python, caption=CNN Implementierung in Keras.]{code/create-cnn-keras.py}
+\lstinputlisting[label=py:keras-cnn, language=Python, caption=CNN Implementierung in Keras.]{code/create-cnn-keras.py}
 
-\lstinputlisting[label=py:load-data-pytorch, language=Python, caption=Transfer Learning in Keras.]{code/transfer-learning-keras.py}
+\lstinputlisting[label=py:keras-transfer-learning, language=Python, caption=Transfer Learning in Keras.]{code/transfer-learning-keras.py}
 
-\lstinputlisting[label=py:load-data-pytorch, language=Python, caption=Funktionale Modelle in Keras.]{code/transfer-learning-functional-keras.py}
+\lstinputlisting[label=py:keras-functional-model, language=Python, caption=Funktionale Modelle in Keras.]{code/transfer-learning-functional-keras.py}
 
 \section{Zusammenfassung und Fazit}
 Mandatory. Short summary of the most important aspects of the report.
