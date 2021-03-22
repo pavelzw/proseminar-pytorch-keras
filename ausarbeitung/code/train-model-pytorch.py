@@ -1,7 +1,7 @@
+from torch.autograd import Variable
+
 loss_criterion = torch.nn.CrossEntropyLoss()
 optimizer = torch.optim.SGD(model.parameters(), lr=lr_rate)
-
-from torch.autograd import Variable
 
 epochs = 3
 
