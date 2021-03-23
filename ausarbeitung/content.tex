@@ -153,19 +153,106 @@ Validierungsdaten.
 
 \subsection{CNN Implementierung}
 
+Wenn man Bilder mit etwas höherer Auflösung als \(28\times 28\) klassifizieren möchte, verwendet man 
+meistens Convolutional Neural Networks. Im Folgenden werden wir uns anschauen, wie wir ein solches CNN in Keras 
+implementieren können. In Abbildung \ref{fig:cnn} sehen wir die Architektur des CNNs: jeweils drei Convolutional Layer 
+mit Max-Pooling Layern dazwischen. Zum Schluss kommt ein Flatten Layer, welches die Daten auf eine Dimension herunterpresst, 
+damit wir für die Klassifizierung zum Schluss noch ein letztes FCNN-Layer hinzufügen können. 
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=.9\textwidth]{figures/cnn}
+    \caption{Convolutional Neural Network.}
+    \label{fig:cnn}
+\end{figure}
+
+In Listing \ref{py:keras-cnn} sehen wir die Implementierung. Da die Daten immer von einem Layer zum 
+folgenden gegeben werden, können wir das \code{Sequential} Modell aus Keras verwenden. 
+Um dieses zu initialisieren, müssen wir ausschließlich ein Array mit den jeweiligen Layern in den 
+Konstruktor geben. Die Hyperparameter der jeweiligen Ebenen können wir bei deren Initialisierung angeben.
+
 \lstinputlisting[label=py:keras-cnn, language=Python, caption=CNN Implementierung in Keras.]{code/create-cnn-keras.py}
+
+Das Laden der Testdatensätze sowie das Training des Modells funktionieren analog zu Listing \ref{py:keras-load-data} 
+und \ref{py:keras-model-training}. 
+
+\subsection{Transfer Learning}
+
+Da man für gute Ergebnisse bei komplexen Problemen komplexe Modelle lange trainieren muss, 
+ist es heutzutage üblich, sich nicht seine eigenen CNNs selbst zu designen, sondern bereits vortrainierte 
+Modelle, welche erwiesenermaßen gut performen, zu verwenden und diese nur leicht abzuändern. 
+In \code{tf.keras.applications}\footnote{\url{https://www.tensorflow.org/api_docs/python/tf/keras/applications}}
+finden wir einige bereits vortrainierte Netze. Wir verwenden beispielhaft VGG16\footnote{\url{https://arxiv.org/abs/1409.1556}}, 
+der Gewinner des ImageNet Wettbewerbs\footnote{\url{http://www.image-net.org/challenges/LSVRC/}} in 2014. 
 
 \lstinputlisting[label=py:keras-transfer-learning, language=Python, caption=Transfer Learning in Keras.]{code/transfer-learning-keras.py}
 
-\lstinputlisting[label=py:keras-functional-model, language=Python, caption=Funktionale Modelle in Keras.]{code/transfer-learning-functional-keras.py}
+In Listing \ref{py:keras-transfer-learning} sehen wir die Implementierung des Transfer Learnings. 
+Wir erstellen wie in Listing \ref{py:keras-cnn} ein Sequential Modell und fügen nach und nach 
+bis auf die letzte alle Ebenen des VGG16-Modells ein. Diese setzen wir noch auf \gqq{nicht trainierbar} 
+und fügen zum Schluss noch eine eigene Ebene zur Klassifikation ein. Dadurch haben wir nur relativ wenige Parameter, 
+die wir effektiv anpassen müssen und kommen so auf eine schnellere Lernperformance.
+
+\subsection{Funktionale Modelle}
+
+Bis jetzt haben wir immer nur sequentielle Implementierungen in Keras betrachtet, wir haben ein \code{Sequential}-Modell erstellt und diesem dann 
+die benötigten Ebenen hinzugefügt. Es gibt allerdings noch eine andere Art, wie man Neuronale Netze implementieren kann: durch funktionale Modelle.
+Der Output des Netzes lässt sich darstellen als \(y = f_1(f_2(\cdots f_n(x)))\), wobei \(f_i\) die \(i\)-te Ebene ist. 
+In Listing \ref{py:keras-functional-model} sehen wir eine äquivalente funktionale Implementierung zu Listing \ref{py:keras-cnn}. 
+Wir instanziieren die jeweiligen Ebenen wie in der sequentiellen API, geben allerdings die Daten aus dem vorherigen Schritt noch in die Ebene ein. 
+Das Modell wird dann durch die Inputs und Outputs definiert. 
+
+\lstinputlisting[label=py:keras-functional-model, language=Python, caption=Funktionale Modelle in Keras.]{code/functional-keras.py}
+
+Es ist sinnvoll, sowohl mit der sequentiellen als auch mit der funktionalen API arbeiten zu können, da manche vortrainierten Modelle wie VGG16 in der 
+sequentiellen API vorliegen während andere Modelle wie Xception\footnote{\url{https://www.tensorflow.org/api_docs/python/tf/keras/applications/Xception}}
+die funktionale API verwenden.
 
 \section{Zusammenfassung und Fazit}
-Mandatory. Short summary of the most important aspects of the report.
-If possible: What are open challenges?
+% Mandatory. Short summary of the most important aspects of the report.
+% If possible: What are open challenges?
 
+% TODO most important aspects
 
+Abschließend lässt sich sagen, dass zwischen TensorFlow und PyTorch heutzutage keine großen Unterschiede gibt. 
+Beide Frameworks sind sehr gut in Python integriert und der Einstieg ist relativ einfach. %TODO steht bereits bei Codestil
 
+\subsection{Verteiltes Rechnen}
+Sowohl PyTorch als auch TensorFlow unterstützen verteiltes Rechnen auf CPU und GPU, zum Beispiel über Kubernetes. 
+Google hat sogenannte Tensor Processing Units (TPUs)\footnote{\url{https://cloud.google.com/tpu/docs/tpus}} entwickelt, 
+welche explizit für TensorFlow optimiert sind und nochmal bessere Performance als mit Grafikkarten erreichen. 
+PyTorch funktioniert mit TPUs allerdings nur durch Drittanbieter-Bibliotheken. 
 
+\subsection{Deployment}
+TensorFlow hat vor Version 2 ausschließlich statische Berechnungsgraphen unterstützt, welche zwar eine gute Performance im Deployment bieten, 
+allerdings nicht so einfach zu debuggen sind. Seit TensorFlow 2 unterstützt das Framework nun auch wie PyTorch dynamische Berechnungsgraphen, 
+welche einem das einfache Programmieren erleichtern. PyTorch unterstützt ausschließlich dynamische Berechnungsgraphen, deshalb bietet es im 
+Deployment nicht ganz so gute Performance wie TensorFlow. 
+
+\subsection{Codestil}
+Beide Frameworks sind mittlerweile sehr \gqq{pythonic}, d.~h. sie integrieren sich sehr gut in den Python Workflow. 
+Wie wir anhand Listing \ref{py:pytorch-model-creation} und \ref{py:keras-model-creation} sehen, unterscheiden sich die beiden Frameworks kaum. 
+Die Keras API vereinfacht allerdings einige Schritte, die in PyTorch etwas aufwendiger sind. 
+
+\subsection{Nvidia, AMD und Apple Silicon}
+Sowohl PyTorch als auch TensorFlow unterstützen Cuda und somit sind schnelle Rechnungen auf Nvidia Grafikkarten problemlos möglich. 
+Leider wird OpenCL von keinen der beiden Frameworks offiziell unterstützt, man kann also mit AMD Grafikkarten nur begrenzt rechnen.
+Die neuen ARM Prozessoren von Apple werden von TensorFlow bereits unterstützt und bieten eine etwa dreimal bessere Performance als 
+vergleichbare Intel CPUs in den neuen Macbooks\footnote{\url{https://blog.tensorflow.org/2020/11/accelerating-tensorflow-performance-on-mac.html}}.
+PyTorch unterstützt die neuen Prozessoren von Apple zum jetzigen Zeitpunkt noch nicht, aktuell läuft das Framework durch Emulation mit Rosetta 2.
+Da Apple Silicon jedoch noch relativ neu ist, kann es natürlich sein, dass sich diesbezüglich in den nächsten Monaten noch etwas ändert.
+
+\subsection{Wann welches Framework verwenden?}
+
+Wie gerade im Vergleich gesehen, unterscheiden sich beide Modelle nicht stark. Nichtsdestotrotz habe ich ein kleines Flowchart Diagramm erstellt, 
+welches einem Anhaltspunkte geben kann, welches Modell man verwenden könnte. 
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=.9\textwidth]{figures/decision-tree}
+    \caption{Wann welches Framework verwenden?}
+    \label{fig:cnn}
+\end{figure}
 
 \newpage
 \section{\LaTeX Examples}
