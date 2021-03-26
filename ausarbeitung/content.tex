@@ -12,7 +12,6 @@ der Lua-Bibliothek Torch, welche bereits seit 2002 existiert.
 
 \section{PyTorch}
 \subsection{Daten laden und präparieren}
-
 Wenn man ein neuronales Netz erstellen und einsetzen möchte, kann man dies in grob 
 drei Schritte unterteilen: 
 \begin{enumerate}
@@ -30,7 +29,6 @@ Cityscapes\footnote{\url{https://www.cityscapes-dataset.com}}
 zur Klassifizierung von Elementen im Straßenverkehr. 
 
 \lstinputlisting[label=py:pytorch-load-data, language=Python, caption=MNIST Datensatz mit TorchVision herunterladen.]{code/load-data-pytorch.py}
-
 In Listing \ref{py:pytorch-load-data} sehen wir am Beispiel MNIST, wie wir so einen Datensatz herunterladen 
 und für unser Modell präparieren können. Hierfür erstellen wir einfach eine 
 Instanz der Klasse \code{datasets.MNIST} und können dort noch ein paar Optionen angeben. 
@@ -48,7 +46,6 @@ Dieser liest die Daten ein, teilt sie in Batches auf (damit der Speicher nicht �
 und kann die Daten außerdem noch mischen, damit kein Bias entsteht.
 
 \subsection{Modellerstellung}
-
 Haben wir die nötigen Daten geladen, ist es nun an der Zeit, das Modell zu erstellen. 
 Ich zeige das ganze hier der Einfachheit halber ein Fully Connected Neural Network 
 mit einem Hidden Layer mit 64 Knoten, komplexere Modelle funktionieren allerdings relativ ähnlich. 
@@ -61,7 +58,6 @@ mit einem Hidden Layer mit 64 Knoten, komplexere Modelle funktionieren allerding
 \end{figure}
 
 \lstinputlisting[label=py:pytorch-model-creation, language=Python, caption=Modellerstellung in PyTorch.]{code/create-model-pytorch.py}
-
 In Listing \ref{py:pytorch-model-creation} sehen wir nun, wie das ganze in PyTorch realisiert wird. 
 Wir erben von der Klasse \code{torch.nn.Module} und müssen nur zwei Sachen implementieren: 
 den Konstruktor und die Forward-Funktion.
@@ -73,26 +69,22 @@ mit dem Hidden Layer (\(64\) Knoten), die zweite Ebene verbindet die \(64\) Knot
 mit dem Output Layer (\(10\) verschiedene Ziffern \(\Rightarrow 10\) Klassen).
 In der Forward-Methode müssen wir nur implementieren, was die Ausgabe des 
 neuronalen Netzes sein soll, wenn wir eine Eingabe \(x\) in das Netzwerk geben. 
-Wir wenden natürlich das erste Layer auf \(x\) an, schicken es somit ins Hidden Layer, 
+Wir wenden natürlich das erste Layer auf \(x\) an, schicken es ins Hidden Layer, 
 darauf die Aktivierungsfunktion und senden diese Daten dann über \code{fc2} an das Output Layer.
 Damit wir zum Schluss auch noch auf eine Wahrscheinlichkeitsverteilung kommen, 
 wenden wir auf die letzte Ebene noch die Softmax-Aktivierungsfunktion \(\sigma(z)_j = \frac{\exp(z_j)}{\sum_{i} \exp(z_i)}\) an.
 
 \subsection{Modell trainieren}
-
 Nachdem wir alle notwendigen Schritte vollführt haben, ist es jetzt an der Zeit, das Modell zu trainieren. 
 Wir werden hier als Optimierungsalgorithmus Stochastic Gradient Descent verwenden und als Loss-Funktion 
 wie üblich bei Klassifizierungsproblemen Cross-Entropy-Loss. 
 Um über die Daten zu iterieren, verwenden wir den oben definierten 
 \code{DataLoader}, welcher uns automatisch gemischte sowie gut portionierte Daten 
 gibt, auf denen wir nun Gradient Descent ausführen können. 
-Um dies zu tun, müssen wir die Bilder sowie Labels noch in eine \code{Variable} 
-wrappen, welche es dem Framework erlaubt, mit den Daten zu differenzieren und somit 
-den Gradienten auszurechnen. 
 Mit \code{optimizer.zero\_grad} weisen wir den Optimierungsalgorithmus darauf hin, 
 dass der Gradient auf Null gesetzt werden soll. Das müssen wir in jedem Schritt machen, 
-da PyTorch die Gradienten sonst aufaddieren würde, was bei RNNs von Vorteil sein kann.
-Der tatsächliche Optimierungsschritt findet dann in den Zeilen 18-21 statt, 
+da PyTorch die Gradienten sonst aufaddieren würde, was bei RNNs von Vorteil sein kann, wir hier allerdings nicht benötigen.
+Der tatsächliche Optimierungsschritt findet dann in den Zeilen 11-14 statt, 
 zuerst der Forward Pass, in welchem die Daten an das neuronale 
 Netz gesendet werden und der Loss ausgerechnet wird und danach der Backward Pass, 
 in welchem sukzessive der Gradient bezüglich der Gewichte \(\frac{\partial \mathcal{L}}{\partial w}\)
@@ -109,7 +101,6 @@ Unterschiede zwischen PyTorch und TensorFlow beschränken.
 \subsection{Daten laden und präparieren}
 
 \lstinputlisting[label=py:keras-load-data, language=Python, caption=MNIST Datensatz mit \texttt{keras.datasets} herunterladen.]{code/load-data-tensorflow.py}
-
 Das Analogon zu \code{torchvision.datasets} lautet 
 \code{tensorflow.keras.datasets}\footnote{\url{https://www.tensorflow.org/api_docs/python/tf/keras/datasets}}. 
 Es gibt allerdings auch noch das Modul \code{tensorflow\_datasets}\footnote{\url{https://www.tensorflow.org/datasets/catalog/overview}}, 
@@ -125,22 +116,18 @@ normiert in \([0,1]\) haben möchten, müssen wir diese ebenfalls zuerst anpasse
 \subsection{Modellerstellung}
 
 \lstinputlisting[label=py:keras-model-creation, language=Python, caption=Modellerstellung in TensorFlow.]{code/create-model-tensorflow.py}
-
 Die Modellerstellung ist sehr ähnlich zu PyTorch. Zu beachten ist hier, dass 
 wir noch ein \code{Flatten}-Layer hinzugefügt haben. Das ist äquivalent zur 
 \code{torch.flatten} Transformation, die in Listing \ref{py:pytorch-load-data} direkt beim 
 Laden des Datensatzes verwendet wird. 
 Ob man die Daten bereits beim Laden der Daten auf die gewünschte Form bringt oder das 
 erst im neuronalen Netz tut, ist Geschmackssache. 
-
 Die Batch-Size wird in TensorFlow im Gegensatz zu PyTorch erst bei der Modellerstellung 
 während \code{model.build} mit der Input-Dimension der Daten angegeben -- hier haben wir ja 
 keinen \code{DataLoader}, der sich explizit um solche Sachen kümmert.
 
 \subsection{Modell trainieren}
-
 \lstinputlisting[label=py:keras-model-training, language=Python, caption=Modell trainieren in TensorFlow.]{code/train-model-tensorflow.py}
-
 Das Training des neuronalen Netzes geht in TensorFlow ohne explizite Schleifen. 
 Wir müssen nur den Optimierungsalgorithmus sowie die Loss-Metrik in \code{model.compile} 
 angeben und dann nur noch \code{model.fit} aufrufen mit den jeweiligen Trainings- und 
@@ -149,7 +136,6 @@ Validierungsdaten.
 %% TODO warum wird die Batch-Size hier erneut verwendet? Warum reicht nicht bereits vorher angegebenes?
 
 \subsection{CNN Implementierung}
-
 Wenn man Bilder mit etwas höherer Auflösung als \(28\times 28\) klassifizieren möchte, verwendet man 
 meistens Convolutional Neural Networks. Im Folgenden werden wir uns anschauen, wie wir ein solches CNN in Keras 
 implementieren können. In Abbildung \ref{fig:cnn} sehen wir die Architektur des CNNs: jeweils drei Convolutional Layer 
@@ -162,28 +148,24 @@ damit wir für die Klassifizierung zum Schluss noch ein letztes FCNN-Layer hinzu
     \caption{Convolutional Neural Network.}
     \label{fig:cnn}
 \end{figure}
-
 In Listing \ref{py:keras-cnn} sehen wir die Implementierung. Da die Daten immer von einem Layer zum 
 folgenden gegeben werden, können wir das \code{Sequential} Modell aus Keras verwenden. 
 Um dieses zu initialisieren, müssen wir ausschließlich ein Array mit den jeweiligen Layern in den 
 Konstruktor geben. Die Hyperparameter der jeweiligen Ebenen können wir bei deren Initialisierung angeben.
 
 \lstinputlisting[label=py:keras-cnn, language=Python, caption=CNN Implementierung in Keras.]{code/create-cnn-keras.py}
-
 Das Laden der Testdatensätze sowie das Training des Modells funktionieren analog zu Listing \ref{py:keras-load-data} 
 und \ref{py:keras-model-training}. 
 
 \subsection{Transfer Learning}
-
 Da man für gute Ergebnisse bei komplexen Problemen komplexe Modelle lange trainieren muss, 
 ist es heutzutage üblich, sich nicht seine eigenen CNNs selbst zu designen, sondern bereits vortrainierte 
-Modelle, welche erwiesenermaßen gut performen, zu verwenden und diese nur leicht abzuändern. 
+Modelle, welche erwiesenermaßen gut performen, zu verwenden und diese nur leicht abzuändern. \\
 In \code{tf.keras.applications}\footnote{\url{https://www.tensorflow.org/api_docs/python/tf/keras/applications}}
 finden wir einige bereits vortrainierte Netze. Wir verwenden beispielhaft VGG16\footnote{\url{https://arxiv.org/abs/1409.1556}}, 
 der Gewinner des ImageNet Wettbewerbs\footnote{\url{http://www.image-net.org/challenges/LSVRC/}} in 2014. 
 
 \lstinputlisting[label=py:keras-transfer-learning, language=Python, caption=Transfer Learning in Keras.]{code/transfer-learning-keras.py}
-
 In Listing \ref{py:keras-transfer-learning} sehen wir die Implementierung des Transfer Learnings. 
 Wir erstellen wie in Listing \ref{py:keras-cnn} ein Sequential Modell und fügen nach und nach 
 bis auf die letzte alle Ebenen des VGG16-Modells ein. Diese setzen wir noch auf \gqq{nicht trainierbar} 
@@ -191,7 +173,6 @@ und fügen zum Schluss noch eine eigene Ebene zur Klassifikation ein. Dadurch ha
 die wir effektiv anpassen müssen und kommen so auf eine schnellere Lernperformance.
 
 \subsection{Funktionale Modelle}
-
 Bis jetzt haben wir immer nur sequentielle Implementierungen in Keras betrachtet, wir haben ein \code{Sequential}-Modell erstellt und diesem dann 
 die benötigten Ebenen hinzugefügt. Es gibt allerdings noch eine andere Art, wie man Neuronale Netze implementieren kann: durch funktionale Modelle.
 Der Output des Netzes lässt sich darstellen als \(y = f_1(f_2(\cdots f_n(x)))\), wobei \(f_i\) die \(i\)-te Ebene ist. 
@@ -200,7 +181,6 @@ Wir instanziieren die jeweiligen Ebenen wie in der sequentiellen API, geben alle
 Das Modell wird dann durch die Inputs und Outputs definiert. 
 
 \lstinputlisting[label=py:keras-functional-model, language=Python, caption=Funktionale Modelle in Keras.]{code/functional-keras.py}
-
 Es ist sinnvoll, sowohl mit der sequentiellen als auch mit der funktionalen API arbeiten zu können, da manche vortrainierten Modelle wie VGG16 in der 
 sequentiellen API vorliegen während andere Modelle wie Xception\footnote{\url{https://www.tensorflow.org/api_docs/python/tf/keras/applications/Xception}}
 die funktionale API verwenden.
@@ -250,41 +230,3 @@ welches einem Anhaltspunkte geben kann, welches Modell man verwenden könnte.
     \caption{Wann welches Framework verwenden?}
     \label{fig:decision-tree}
 \end{figure}
-
-\newpage
-\section{\LaTeX Examples}
-As a help to get started with this template. To be deleted for submission.
-\subsection{Citation examples}
-\citet{campbell:2017} define the stages of information processing in a nervous system as: "sensory input, integration, and motor output". \\
-The stages of information processing in a nervous system are defined as: "sensory input, integration, and motor output" \citep{campbell:2017}. 
-
-\subsection{Table example}
-\input{tables/random_numbers}
-
-\subsection{Figure examples}
-This is a png file, it gets blurry when you zoom in:
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=.7\textwidth]{figures/leaky_integration.png}
-    \caption{Symbolic representation of a leaky integrating neuron.}
-    \label{fig:leaky_integration}
-\end{figure}
-
-This is an eps file, it is always sharp:\\
-Notice how the formatting option "[htbp]" allows for the figure to be moved around to page \pageref{fig:activation_function}. Hence, it is best to rather write: The eps file in figure \ref{fig:activation_function} always stays sharp.
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=.7\textwidth]{figures/activation_functions}
-    \caption{Shapes of a parametrized tanh activation function.}
-    \label{fig:activation_function}
-\end{figure}
-
-\subsection{Math example}
-The state update of the leaky integrating neuron in figure \ref{fig:leaky_integration} can be formulated as:
-\begin{align}
-    x_i(t+1) &= \lambda_i \cdot \left(W_{i,j} \cdot U_j(t)\right) + (1-\lambda_i) \cdot \theta_i(t)
-    \label{eq:leaky_integration}
-\end{align}
-
-\subsection{Footnote example}
-The implementation is available on github\footnote{https://github.com/schniewmatz/recurrence}.
