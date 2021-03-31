@@ -9,7 +9,6 @@ test_set = datasets.MNIST(root="data", train=False, download=True,
                         [transforms.ToTensor(), torch.flatten]))
 
 batch_size = 50
-
 train_loader = torch.utils.data.DataLoader(train_set, batch_size=batch_size, 
                                            shuffle=True)
 test_loader = torch.utils.data.DataLoader(test_set, batch_size=batch_size, 

@@ -19,7 +19,6 @@ drei Schritte unterteilen:
     \item Modell erstellen
     \item Modell trainieren
 \end{enumerate}
-
 Möchte man populäre, weit verbreitete Datensätze für sein Modell verwenden, bietet sich 
 \code{torchvision.datasets}\footnote{\url{https://pytorch.org/vision/stable/datasets.html}} 
 an. Dort gibt es viele bekannte Datensätze für die verschiedensten Probleme 
@@ -27,6 +26,7 @@ wie z.~B. MNIST\footnote{70000 handgeschriebene Ziffern: \url{http://yann.lecun.
 ImageNet\footnote{1,4 Millionen Bilder, 1000 verschiedene Klassen: \url{http://image-net.org}} für Bildklassifizierung oder 
 Cityscapes\footnote{Videos aus dem Straßenverkehr: \url{https://www.cityscapes-dataset.com}} 
 zur Klassifizierung von Elementen im Straßenverkehr. 
+Das folgende Beispiel ist angelehnt an die Einführung von \cite{mahmood:2019}.
 
 \lstinputlisting[label=py:pytorch-load-data, language=Python, caption=MNIST Datensatz mit TorchVision herunterladen.]{code/load-data-pytorch.py}
 In Listing \ref{py:pytorch-load-data} sehen wir am Beispiel MNIST, wie wir so einen Datensatz herunterladen 
@@ -66,7 +66,7 @@ so aussieht als hätten wir drei Ebenen, sind die Ebenen, die wir implementieren
 die Verbindungslinien zwischen den Knoten, von denen es nur zwei gibt: 
 die erste Ebene verbindet das Input Layer (\(28 \cdot 28\) Pixel \(\Rightarrow 28 \cdot 28\) Knoten) 
 mit dem Hidden Layer (\(64\) Knoten), die zweite Ebene verbindet die \(64\) Knoten des Hidden Layers
-mit dem Output Layer (\(10\) verschiedene Ziffern \(\Rightarrow 10\) Klassen).
+mit dem Output Layer (\(10\)~verschiedene Ziffern \(\Rightarrow 10\) Klassen).
 In der Forward-Methode müssen wir nur implementieren, was die Ausgabe des 
 neuronalen Netzes sein soll, wenn wir eine Eingabe \(x\) in das Netzwerk geben. 
 Wir wenden natürlich das erste Layer auf \(x\) an, schicken es ins Hidden Layer, 
@@ -108,9 +108,9 @@ Das Analogon zu \code{torchvision.datasets} lautet
 Es gibt allerdings auch noch das Modul \code{tensorflow\_datasets}\footnote{\url{https://www.tensorflow.org/datasets/catalog/overview}}, 
 welches einem eine deutlich größere Vielfalt an Datensätzen liefert als das zuerst genannte.
 TensorFlow arbeitet mit sogenannten One-Hot-kodierten Tensoren: statt Targets der Form 
-\((i)\) für die \(i\)-te Klasse werden Targets der Form \(\begin{pmatrix}
-    0 & \cdots & 0 & 1 & 0 \cdots & 0
-\end{pmatrix}\) verwendet, wobei die \(1\) an der \(i\)-ten Komponente steht. 
+\(\begin{pmatrix} i \end{pmatrix}\) für die \(i\)-te Klasse werden Targets der Form \[\begin{pmatrix}
+    0 & \cdots & 0 & 1 & 0 & \cdots & 0
+\end{pmatrix} \]  verwendet, wobei die \(1\) an der \(i\)-ten Komponente steht. 
 Da die Daten allerdings im ersten Format gegeben sind, müssen wir diese zuerst über \code{tf.one\_hot} umformatieren. 
 Die Eingabebilder haben pro Pixel Werte zwischen \(0\) und \(255\). 
 Da das neuronale Netz mit normierten Daten zwischen \(0\) und \(1\) besser arbeitet, 
@@ -122,7 +122,7 @@ müssen wir diese ebenfalls zuerst anpassen.
 
 \lstinputlisting[label=py:keras-model-creation, language=Python, caption=Modellerstellung in TensorFlow.]{code/create-model-tensorflow.py}
 Die Modellerstellung ist sehr ähnlich zu PyTorch. Zu beachten ist hier, dass 
-wir noch ein \code{Flatten}-Layer hinzugefügt haben. Das ist äquivalent zur 
+wir ein \code{Flatten}-Layer hinzugefügt haben. Das ist äquivalent zur 
 \code{torch.flatten}-Transformation, die in Listing \ref{py:pytorch-load-data} direkt beim 
 Laden des Datensatzes verwendet wird. 
 Ob man die Daten bereits beim Laden der Daten auf die gewünschte Form bringt oder das 
@@ -207,33 +207,34 @@ Beide Frameworks sind sehr gut in Python integriert und der Einstieg ist relativ
 Sowohl PyTorch als auch TensorFlow unterstützen verteiltes Rechnen auf CPU und GPU, zum Beispiel über Kubernetes. 
 Google hat sogenannte Tensor Processing Units (TPUs)\footnote{\url{https://cloud.google.com/tpu/docs/tpus}} entwickelt, 
 welche explizit für TensorFlow optimiert sind und nochmal bessere Performance als mit Grafikkarten erreichen. 
-PyTorch funktioniert mit TPUs allerdings nur durch Drittanbieter-Bibliotheken. 
+PyTorch funktioniert mit TPUs allerdings nur durch Drittanbieter-Bibliotheken \citep{saifee:2020}.
 
 \subsection{Deployment}
 TensorFlow hat vor Version 2 ausschließlich statische Berechnungsgraphen unterstützt, welche zwar eine gute Performance im Deployment bieten, 
 allerdings nicht so einfach zu debuggen sind. Seit TensorFlow 2 unterstützt das Framework nun auch wie PyTorch dynamische Berechnungsgraphen, 
 welche einem das einfache Programmieren erleichtern. PyTorch unterstützt ausschließlich dynamische Berechnungsgraphen, deshalb bietet es im 
-Deployment nicht ganz so gute Performance wie TensorFlow. 
+Deployment nicht ganz so gute Performance wie TensorFlow \citep{dash:2020}.
 
 \subsection{Codestil}
 Beide Frameworks sind mittlerweile sehr \gqq{pythonic}, d.~h. sie integrieren sich sehr gut in den Python Workflow. 
 Wie wir anhand Listing \ref{py:pytorch-model-creation} und \ref{py:keras-model-creation} sehen, unterscheiden sich die beiden Frameworks kaum. 
+\cite{saifee:2020} bietet hier noch weitere Beispiele.
 Die Keras API vereinfacht allerdings einige Schritte, die in PyTorch etwas aufwendiger sind. 
 
 \subsection{Nvidia, AMD und Apple Silicon}
 Sowohl PyTorch als auch TensorFlow unterstützen Cuda und somit sind schnelle Rechnungen auf Nvidia Grafikkarten problemlos möglich. 
-Leider wird OpenCL von keinen der beiden Frameworks offiziell unterstützt, man kann also mit AMD Grafikkarten nur begrenzt rechnen.
+Leider wird OpenCL von keinen der beiden Frameworks offiziell unterstützt, man kann also mit AMD Grafikkarten nur begrenzt rechnen \citep{dimolarov:2019}.
 Die neuen ARM Prozessoren von Apple werden von TensorFlow bereits unterstützt und bieten eine etwa dreimal bessere Performance als 
 vergleichbare Intel CPUs in den neuen Macbooks\footnote{\url{https://blog.tensorflow.org/2020/11/accelerating-tensorflow-performance-on-mac.html}}.
 PyTorch unterstützt die neuen Prozessoren von Apple zum jetzigen Zeitpunkt noch nicht, aktuell läuft das Framework durch Emulation mit Rosetta 2.
-Da Apple Silicon jedoch noch relativ neu ist, kann es natürlich sein, dass sich diesbezüglich in den nächsten Monaten noch etwas ändert.
+Da Apple Silicon jedoch noch relativ neu ist, kann es natürlich sein, dass sich diesbezüglich in den nächsten Monaten noch etwas ändert\footnote{\url{https://github.com/pytorch/pytorch/issues/47688}}.
 
 \newpage
 
 \subsection{Wann welches Framework verwenden?}
 
 Wie gerade im Vergleich gesehen, unterscheiden sich beide Modelle nicht stark. Nichtsdestotrotz habe ich ein kleines Flowchart Diagramm erstellt, 
-welches einem Anhaltspunkte geben kann, welches Modell man verwenden könnte. 
+welches einem Anhaltspunkte geben kann, welches Modell man verwenden könnte\footnote{Angelehnt an \url{https://realpython.com/pytorch-vs-tensorflow/}}.
 
 \begin{figure}[htbp]
     \centering
