@@ -9,10 +9,10 @@ jobs:
       - name: Compile LaTeX document
         uses: xu-cheng/latex-action@v2
         with:
-          working_directory: ausarbeitung
+          working_directory: elaboration
           root_file: main.tex
       - name: Upload LaTeX document
         uses: actions/upload-artifact@v2
         with: 
           name: PDF
-          path: ausarbeitung/out/main.pdf
+          path: elaboration/out/main.pdf
